@@ -1,0 +1,13 @@
+{
+  "primaryColor": "#FFFFFF",
+  "secondaryColor": "#E8EBE6",
+  "backgroundColor": "#FFFFFF",
+  "textColor": "#20251F",
+  "accentColor": "#246B45",
+  "fontHeading": "Barlow Condensed SemiBold",
+  "fontBody": "Inter",
+  "borderRadius": "0.5rem",
+  "logoText": "Pedidos Taquería para Recoger",
+  "logoImageUrl": "https://vabacntbfcwhgkjqajcw.supabase.co/storage/v1/object/public/screenshots/projects/P-A28E73/logo.png",
+  "tone": "trustworthy"
+}

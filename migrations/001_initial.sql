@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS migrations (id TEXT PRIMARY KEY, applied_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS categories (id TEXT PRIMARY KEY, name TEXT NOT NULL, position INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS products (id TEXT PRIMARY KEY, category_id TEXT NOT NULL REFERENCES categories(id), name TEXT NOT NULL, description TEXT NOT NULL, price INTEGER NOT NULL CHECK(price >= 0), available INTEGER NOT NULL CHECK(available IN (0,1)), image TEXT, position INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS product_options (id TEXT PRIMARY KEY, product_id TEXT NOT NULL REFERENCES products(id), group_name TEXT NOT NULL, label TEXT NOT NULL, price INTEGER NOT NULL DEFAULT 0 CHECK(price >= 0), available INTEGER NOT NULL DEFAULT 1 CHECK(available IN (0,1)));
+CREATE INDEX IF NOT EXISTS products_category ON products(category_id);
+CREATE INDEX IF NOT EXISTS options_product ON product_options(product_id);
+CREATE TABLE IF NOT EXISTS sessions (id TEXT PRIMARY KEY, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS drafts (session_id TEXT PRIMARY KEY REFERENCES sessions(id), revision INTEGER NOT NULL DEFAULT 0, name TEXT NOT NULL DEFAULT '', note TEXT NOT NULL DEFAULT '', review_required INTEGER NOT NULL DEFAULT 0);
+CREATE TABLE IF NOT EXISTS draft_lines (id TEXT PRIMARY KEY, session_id TEXT NOT NULL REFERENCES drafts(session_id), product_id TEXT NOT NULL REFERENCES products(id), quantity INTEGER NOT NULL CHECK(quantity BETWEEN 1 AND 20), note TEXT NOT NULL, option_ids TEXT NOT NULL, snapshot TEXT NOT NULL);
+CREATE INDEX IF NOT EXISTS draft_lines_session ON draft_lines(session_id);
+CREATE TABLE IF NOT EXISTS orders (id TEXT PRIMARY KEY, session_id TEXT NOT NULL REFERENCES sessions(id), idempotency_key TEXT NOT NULL, request_hash TEXT NOT NULL, name TEXT NOT NULL, note TEXT NOT NULL, total INTEGER NOT NULL CHECK(total >= 0), status TEXT NOT NULL DEFAULT 'Guardado como demostración', created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, UNIQUE(session_id, idempotency_key));
+CREATE INDEX IF NOT EXISTS orders_session ON orders(session_id, created_at);
+CREATE TABLE IF NOT EXISTS order_lines (id TEXT PRIMARY KEY, order_id TEXT NOT NULL REFERENCES orders(id), product_id TEXT NOT NULL REFERENCES products(id), name TEXT NOT NULL, unit_price INTEGER NOT NULL, quantity INTEGER NOT NULL, personalization TEXT NOT NULL, note TEXT NOT NULL);
+CREATE INDEX IF NOT EXISTS order_lines_order ON order_lines(order_id);

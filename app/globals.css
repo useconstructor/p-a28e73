@@ -1,33 +1,52 @@
 @import "tailwindcss";
 
-@theme {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --color-background: oklch(1 0 0);
-  --color-foreground: oklch(0.145 0 0);
-  --color-card: oklch(1 0 0);
-  --color-card-foreground: oklch(0.145 0 0);
-  --color-primary: oklch(0.205 0 0);
-  --color-primary-foreground: oklch(0.985 0 0);
-  --color-secondary: oklch(0.97 0 0);
-  --color-secondary-foreground: oklch(0.205 0 0);
-  --color-muted: oklch(0.97 0 0);
-  --color-muted-foreground: oklch(0.556 0 0);
-  --color-accent: oklch(0.97 0 0);
-  --color-accent-foreground: oklch(0.205 0 0);
-  --color-destructive: oklch(0.577 0.245 27.325);
-  --color-border: oklch(0.922 0 0);
-  --color-input: oklch(0.922 0 0);
-  --color-ring: oklch(0.708 0 0);
+@theme inline {
+  --font-sans: var(--font-inter), sans-serif;
+  --font-heading: var(--font-barlow), sans-serif;
+  --color-paper: #FFFFFF;
+  --color-maize: #F2C84B;
+  --color-cilantro: #246B45;
+  --color-ink: #20251F;
+  --color-aluminum: #E8EBE6;
+  --color-secondary-text: #596156;
+  --color-background: #FFFFFF;
+  --color-foreground: #20251F;
+  --color-card: #FFFFFF;
+  --color-card-foreground: #20251F;
+  --color-primary: #246B45;
+  --color-primary-foreground: #FFFFFF;
+  --color-secondary: #E8EBE6;
+  --color-secondary-foreground: #20251F;
+  --color-muted: #E8EBE6;
+  --color-muted-foreground: #596156;
+  --color-accent: #F2C84B;
+  --color-accent-foreground: #20251F;
+  --color-destructive: #B42332;
+  --color-destructive-foreground: #FFFFFF;
+  --color-border: #E8EBE6;
+  --color-input: #596156;
+  --color-ring: #246B45;
   --radius: 0.5rem;
 }
-
 @layer base {
-  * {
-    border-color: var(--color-border);
-  }
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-  }
+  * { border-color: var(--color-border); }
+  body { background: var(--color-background); color: var(--color-foreground); font-family: var(--font-inter), sans-serif; font-size: 16px; }
+  button, a, input, textarea { -webkit-tap-highlight-color: transparent; }
+  button, a { touch-action: manipulation; }
+  button:not(:disabled), a { cursor: pointer; }
+  button:focus-visible, a:focus-visible { outline: 3px solid var(--color-ring); outline-offset: 4px; }
+  h1, h2, h3 { font-family: var(--font-barlow), sans-serif; font-weight: 600; }
+  ::selection { background: var(--color-maize); color: var(--color-ink); }
+}
+@layer utilities {
+  .receipt { position: relative; background: var(--color-paper); }
+  .receipt::before { content: ''; position: absolute; top: -8px; left: 0; right: 0; height: 9px; background: linear-gradient(135deg, transparent 50%, white 50%) 0 0 / 16px 16px, linear-gradient(225deg, transparent 50%, white 50%) 0 0 / 16px 16px; }
+  .dialog-overlay { animation: fade-in 140ms ease-out; }
+  .dialog-content { animation: dialog-in 160ms ease-out; }
+  .dot-pattern { background-image: radial-gradient(var(--color-cilantro) 1.25px, transparent 1.25px); background-size: 8px 8px; }
+}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dialog-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
